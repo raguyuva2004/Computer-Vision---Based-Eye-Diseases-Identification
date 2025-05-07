@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EYE AI | Futuristic Diagnosis</title>
+    <style>
+        /* ==== HOLOGRAPHIC COLOR SCHEME ==== */
+        :root {
+            --hologram-blue: rgba(0, 255, 255, 0.8);
+            --hologram-pink: rgba(255, 0, 255, 0.8);
+            --matrix-green: #00ff9d;
+            --dark-space: #0a0a1a;
+            --card-bg: rgba(15, 15, 35, 0.7);
+            --glow-effect: 0 0 15px currentColor;
+        }
+
+        /* ==== BASE STYLES ==== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+        }
+
+        body {
+            background: 
+                radial-gradient(circle at 20% 30%, 
+                    rgba(0, 50, 100, 0.8) 0%, 
+                    transparent 40%),
+                linear-gradient(var(--dark-space), #000);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ==== HOLOGRAPHIC GRID BACKGROUND ==== */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 40s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+
+        /* ==== MAIN CONTAINER ==== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* ==== FLOATING HEADER ==== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--hologram-blue);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.2),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--hologram-blue), var(--hologram-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--glow-effect);
+        }
+
+        .logo i {
+            margin-right: 15px;
+            font-size: 2.5rem;
+        }
+
+        /* ==== REALISTIC EYE SECTION ==== */
+        .eye-model-container {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .eye-model {
+            flex: 1;
+            min-height: 400px;
+            background: 
+                radial-gradient(circle at center, 
+                    rgba(0, 200, 255, 0.1) 0%, 
+                    transparent 70%),
+                var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--hologram-blue);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.3),
+                inset 0 0 30px rgba(0, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            transition: all 0.5s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .real-eye-container {
+            width: 300px;
+            height: 200px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .eye {
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/JYj3V3Q.jpg') center/cover;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .eyelid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            border-radius: 50%;
+            top: -100%;
+            left: 0;
+            transition: top 0.4s ease-out;
+            z-index: 10;
+        }
+
+        .eyelid.lower {
+            top: 100%;
+        }
+
+        .eye:hover .eyelid.upper {
+            top: -50%;
+        }
+
+        .eye:hover .eyelid.lower {
+            top: 50%;
+        }
+
+        .eye.active .eyelid.upper {
+            top: -100%;
+            animation: blinkUpper 0.4s ease-out;
+        }
+
+        .eye.active .eyelid.lower {
+            top: 100%;
+            animation: blinkLower 0.4s ease-out;
+        }
+
+        @keyframes blinkUpper {
+            0%, 100% { top: -100%; }
+            50% { top: 0%; }
+        }
+
+        @keyframes blinkLower {
+            0%, 100% { top: 100%; }
+            50% { top: 0%; }
+        }
+
+        .pupil {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #000;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
+        .iris {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at center, #3a0ca3 0%, #4361ee 50%, #4cc9f0 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+        }
+
+        .cornea-reflection {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            top: 30%;
+            left: 30%;
+            z-index: 6;
+        }
+
+        /* ==== UPLOAD SECTION ==== */
+        .upload-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .upload-card {
+            background: var(--card-bg);
+            border: 1px solid var(--hologram-pink);
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.2),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--hologram-blue);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .upload-area:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--hologram-blue);
+            text-shadow: var(--glow-effect);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 250px;
+            margin-top: 1.5rem;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        /* ==== AI ASSISTANT ==== */
+        .ai-assistant {
+            background: var(--card-bg);
+            border: 1px solid var(--matrix-green);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 157, 0.2),
+                inset 0 0 20px rgba(0, 255, 157, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--hologram-blue), var(--hologram-pink));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            box-shadow: 0 0 15px var(--matrix-green);
+        }
+
+        .ai-message {
+            border-left: 3px solid var(--matrix-green);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* ==== RISK METER ==== */
+        .risk-meter {
+            background: var(--card-bg);
+            border: 1px solid var(--hologram-pink);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.2),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .risk-levels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .risk-level {
+            width: 50px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-level::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4cc9f0, #f72585);
+            transition: width 1.5s ease;
+        }
+
+        .risk-level.active::after {
+            width: 100%;
+        }
+
+        .risk-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ==== BUTTONS ==== */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--hologram-blue), var(--hologram-pink));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 5px 15px rgba(0, 255, 255, 0.4),
+                0 0 10px rgba(255, 0, 255, 0.4);
+            text-decoration: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(0, 255, 255, 0.6),
+                0 0 15px rgba(255, 0, 255, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* ==== RESPONSIVE DESIGN ==== */
+        @media (max-width: 1024px) {
+            .eye-model-container {
+                flex-direction: column;
+            }
+            
+            .eye-model {
+                min-height: 300px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grid-lines"></div>
+    
+    <div class="container">
+        <!-- ==== FLOATING HEADER ==== -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <span>EYE AI</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <span style="margin-right: 1rem; font-family: 'Rajdhani';">Diagnosis System v3.0</span>
+                <div style="width: 15px; height: 15px; background: var(--matrix-green); border-radius: 50%; box-shadow: 0 0 10px var(--matrix-green);"></div>
+            </div>
+        </header>
+
+        <!-- ==== REALISTIC EYE + UPLOAD ==== -->
+        <div class="eye-model-container">
+            <!-- Realistic Eye Model -->
+            <div class="eye-model">
+                <div class="real-eye-container" id="eyeContainer">
+                    <div class="eye" id="realEye">
+                        <div class="eyelid upper"></div>
+                        <div class="cornea-reflection"></div>
+                        <div class="iris"></div>
+                        <div class="pupil"></div>
+                        <div class="eyelid lower"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-card">
+                    <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron'; color: var(--hologram-blue); text-shadow: var(--glow-effect);">SCAN ANALYSIS</h2>
+                    <div class="upload-area" id="dropArea">
+                        <i class="fas fa-microscope upload-icon"></i>
+                        <p style="margin-bottom: 0.5rem; font-size: 1.2rem;">Upload Retinal Image</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Supports: JPG, PNG, DICOM</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        <img id="imagePreview" alt="Preview">
+                    </div>
+                    <button class="btn" id="analyzeBtn" disabled>
+                        <i class="fas fa-brain"></i> AI Diagnosis
+                    </button>
+                </div>
+
+                <!-- AI Assistant -->
+                <div class="ai-assistant">
+                    <div class="ai-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 style="font-family: 'Orbitron';">AI ASSISTANT</h3>
+                    </div>
+                    <div class="ai-message" id="aiMessage">
+                        Upload a retinal scan to begin analysis. I'll explain the results in detail.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==== RISK METER ==== -->
+        <div class="risk-meter">
+            <h2 style="margin-bottom: 1rem; font-family: 'Orbitron'; color: var(--hologram-pink); text-shadow: var(--glow-effect);">DISEASE RISK ASSESSMENT</h2>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 1.5rem;">AI-powered risk evaluation based on scan</p>
+            
+            <div class="risk-levels">
+                <div class="risk-level" id="risk1"></div>
+                <div class="risk-level" id="risk2"></div>
+                <div class="risk-level" id="risk3"></div>
+                <div class="risk-level" id="risk4"></div>
+                <div class="risk-level" id="risk5"></div>
+            </div>
+            <div class="risk-labels">
+                <span>Low</span>
+                <span>Moderate</span>
+                <span>High</span>
+                <span>Severe</span>
+                <span>Critical</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Realistic Eye Interaction
+        const eyeContainer = document.getElementById('eyeContainer');
+        const realEye = document.getElementById('realEye');
+        
+        // Make eye blink on click
+        eyeContainer.addEventListener('click', function() {
+            realEye.classList.add('active');
+            setTimeout(() => {
+                realEye.classList.remove('active');
+            }, 400);
+        });
+        
+        // Make eye follow cursor slightly
+        document.addEventListener('mousemove', function(e) {
+            const eyeRect = eyeContainer.getBoundingClientRect();
+            const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+            const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+            
+            const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+            const distance = Math.min(20, 
+                Math.sqrt(Math.pow(e.clientX - eyeCenterX, 2) + Math.pow(e.clientY - eyeCenterY, 2)) / 10);
+            
+            const pupil = document.querySelector('.pupil');
+            const iris = document.querySelector('.iris');
+            
+            const moveX = Math.cos(angle) * distance;
+            const moveY = Math.sin(angle) * distance;
+            
+            pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+            iris.style.transform = `translate(calc(-50% + ${moveX * 0.7}px), calc(-50% + ${moveY * 0.7}px))`;
+        });
+
+        // File Upload Logic
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const aiMessage = document.getElementById('aiMessage');
+        let uploadedFile = null;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropArea.style.borderColor = 'var(--matrix-green)';
+            dropArea.style.background = 'rgba(0, 255, 157, 0.1)';
+        }
+
+        function unhighlight() {
+            dropArea.style.borderColor = 'var(--hologram-blue)';
+            dropArea.style.background = 'rgba(0, 255, 255, 0.05)';
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+        dropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length) {
+                uploadedFile = files[0];
+                if (uploadedFile.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                        analyzeBtn.disabled = false;
+                        aiMessage.textContent = "Image ready for analysis. Click 'AI Diagnosis' to proceed.";
+                        
+                        // Make the eye blink when image is loaded
+                        realEye.classList.add('active');
+                        setTimeout(() => {
+                            realEye.classList.remove('active');
+                        }, 400);
+                    };
+                    reader.readAsDataURL(uploadedFile);
+                }
+            }
+        }
+
+        // Analyze Button - Now with actual backend integration
+        analyzeBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            if (!uploadedFile) {
+                aiMessage.textContent = "Please upload an image first!";
+                return;
+            }
+            
+            // Show loading state
+            analyzeBtn.innerHTML = '<i class="fas fa-cog fa-spin"></i> Processing...';
+            aiMessage.textContent = "Analyzing retinal patterns with deep neural networks...";
+            
+            try {
+                // Create FormData to send the file
+                const formData = new FormData();
+                formData.append('file', uploadedFile);
+                
+                // Send to your Flask backend
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                // Process the results
+                displayResults(result);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                aiMessage.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                analyzeBtn.innerHTML = '<i class="fas fa-brain"></i> Retry Analysis';
+            }
+        });
+
+        function displayResults(result) {
+            // Activate risk meters based on confidence
+            activateRiskMeters(result.confidence);
+            
+            // Update AI message with actual results
+            aiMessage.innerHTML = `
+                <strong>Diagnosis Complete:</strong> ${result.class} detected.<br><br>
+                <strong>Confidence:</strong> ${result.confidence}<br><br>
+                <strong>Recommendation:</strong> ${getRecommendation(result.class)}
+            `;
+            
+            analyzeBtn.innerHTML = '<i class="fas fa-chart-line"></i> View Detailed Report';
+            
+            // Make the eye blink when results are shown
+            realEye.classList.add('active');
+            setTimeout(() => {
+                realEye.classList.remove('active');
+            }, 400);
+        }
+
+        function activateRiskMeters(confidenceStr) {
+            // Extract numeric value from confidence string (e.g., "87.23%")
+            const confidence = parseFloat(confidenceStr) / 100;
+            
+            // Determine how many risk meters to activate
+            const riskLevels = ['risk1', 'risk2', 'risk3', 'risk4', 'risk5'];
+            const levelsToActivate = Math.min(Math.ceil(confidence * riskLevels.length), riskLevels.length);
+            
+            riskLevels.forEach((risk, index) => {
+                setTimeout(() => {
+                    if (index < levelsToActivate) {
+                        document.getElementById(risk).classList.add('active');
+                    }
+                }, index * 300);
+            });
+        }
+
+        function getRecommendation(diagnosis) {
+            const recommendations = {
+                "cataract": "Schedule an appointment with an ophthalmologist for further evaluation.",
+                "DiabeticRetinopathy": "Consult with your endocrinologist and ophthalmologist immediately.",
+                "Glaucoma": "Urgent ophthalmologist consultation recommended within 1 week.",
+                "Healthy": "No immediate action needed. Regular checkups recommended.",
+                "Myopia": "Schedule an eye exam to update your prescription.",
+                "ODIR-5K": "Further specialized testing recommended."
+            };
+            return recommendations[diagnosis] || "Please consult with an eye care professional.";
+        }
+    </script>
+</body>
+</html>
